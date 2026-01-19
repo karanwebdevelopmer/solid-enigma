@@ -1,0 +1,2642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Brain Challenge Pro - Complete Version</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== BASE STYLES ===== */
+        :root {
+            --primary: #7B68EE;
+            --secondary: #00D4FF;
+            --accent: #FF6B8B;
+            --success: #00FF9D;
+            --warning: #FFD166;
+            --background: #0F0F23;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--background);
+            color: white;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        .app-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        /* ===== AUTH SCREEN ===== */
+        .auth-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--background);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 9999;
+        }
+        
+        .auth-content {
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .auth-logo {
+            font-size: 4rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+        
+        .auth-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .auth-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 18px;
+            border-radius: 15px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+        
+        .auth-btn.google {
+            background: white;
+            color: #333;
+        }
+        
+        .auth-btn.anonymous {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .auth-footer {
+            margin-top: 25px;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+        }
+        
+        /* ===== HEADER ===== */
+        .mobile-header {
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 70px;
+            flex-shrink: 0;
+        }
+        
+        .logo-mobile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            cursor: pointer;
+        }
+        
+        .logo-mobile i {
+            font-size: 1.6rem;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+        
+        /* ===== CONTENT AREA ===== */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 20px;
+            padding-bottom: 90px;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .mobile-page {
+            display: none;
+            width: 100%;
+            max-width: 100%;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        .mobile-page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* ===== HOME PAGE ===== */
+        .hero-mobile {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-top: 10px;
+        }
+        
+        .hero-mobile h1 {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+        }
+        
+        .hero-mobile p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+            max-width: 90%;
+            margin: 0 auto;
+        }
+        
+        /* ===== ACTION CARDS ===== */
+        .action-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .action-card {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 80px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            border-color: rgba(123, 104, 238, 0.3);
+        }
+        
+        .action-card:active {
+            transform: translateY(0);
+        }
+        
+        .action-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .action-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .action-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .action-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* ===== STATS GRID ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-box {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .stat-box:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 5px;
+            line-height: 1.2;
+        }
+        
+        .stat-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* ===== BUTTONS ===== */
+        .btn {
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(123, 104, 238, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(123, 104, 238, 0.4);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(90deg, var(--warning), #FF9E00);
+            color: black;
+            box-shadow: 0 4px 15px rgba(255, 209, 102, 0.3);
+        }
+        
+        /* ===== INPUTS ===== */
+        input[type="text"] {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.1);
+        }
+        
+        input[type="text"]::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* ===== ROOM PAGE ===== */
+        .room-code-display {
+            background: rgba(123, 104, 238, 0.2);
+            padding: 20px;
+            border-radius: 20px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 5px;
+            text-align: center;
+            font-size: 2.5rem;
+            margin: 20px 0;
+            font-weight: 800;
+            border: 2px dashed rgba(123, 104, 238, 0.5);
+        }
+        
+        .players-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        
+        .player-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .player-item:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateX(5px);
+        }
+        
+        .player-item.you {
+            border-color: var(--secondary);
+            background: rgba(0, 212, 255, 0.1);
+        }
+        
+        .player-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .player-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .player-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .player-status {
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+        
+        .status-ready {
+            color: var(--success);
+        }
+        
+        .status-waiting {
+            color: var(--warning);
+        }
+        
+        /* ===== GAME PAGE ===== */
+        .game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .opponent-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex: 1;
+        }
+        
+        .score-display {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .score-item {
+            text-align: center;
+            min-width: 70px;
+        }
+        
+        .score-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            line-height: 1;
+        }
+        
+        .score-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+        
+        .score-separator {
+            font-size: 2rem;
+            color: var(--secondary);
+            font-weight: 800;
+        }
+        
+        .game-timer {
+            text-align: center;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin: 25px 0;
+            text-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+        }
+        
+        .question-card {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .question-text {
+            font-size: 1.3rem;
+            line-height: 1.5;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .option-card {
+            background: var(--glass);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s;
+            min-height: 70px;
+        }
+        
+        .option-card:hover {
+            border-color: rgba(123, 104, 238, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .option-card:active {
+            transform: translateY(0);
+        }
+        
+        .option-card.selected {
+            border-color: var(--secondary);
+            background: rgba(123, 104, 238, 0.1);
+        }
+        
+        .option-card.correct {
+            border-color: var(--success);
+            background: rgba(0, 255, 157, 0.1);
+        }
+        
+        .option-card.wrong {
+            border-color: var(--accent);
+            background: rgba(255, 107, 139, 0.1);
+        }
+        
+        .option-letter {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .option-text {
+            flex: 1;
+            font-size: 1.1rem;
+            line-height: 1.4;
+        }
+        
+        .feedback-container {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 700;
+            animation: feedbackPop 0.5s ease;
+        }
+        
+        .feedback.correct {
+            background: rgba(0, 255, 157, 0.15);
+            color: var(--success);
+            border: 2px solid var(--success);
+        }
+        
+        .feedback.incorrect {
+            background: rgba(255, 107, 139, 0.15);
+            color: var(--accent);
+            border: 2px solid var(--accent);
+        }
+        
+        @keyframes feedbackPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        /* ===== PAGE HEADERS ===== */
+        .page-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            padding-top: 10px;
+        }
+        
+        .back-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-3px);
+        }
+        
+        .back-btn:active {
+            transform: translateX(0);
+        }
+        
+        .page-header h2 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            flex: 1;
+            margin: 0;
+        }
+        
+        /* ===== FRIENDS PAGE ===== */
+        .friends-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .friend-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .friend-item:hover {
+            border-color: rgba(0, 212, 255, 0.3);
+            transform: translateX(5px);
+        }
+        
+        .friend-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        
+        .friend-info {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .friend-name {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        
+        .friend-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        
+        .status-online {
+            background: var(--success);
+        }
+        
+        .status-playing {
+            background: var(--warning);
+        }
+        
+        .status-offline {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* ===== TOURNAMENTS ===== */
+        .tournament-card {
+            background: var(--glass);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .tournament-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .tournament-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--warning);
+        }
+        
+        .tournament-prize {
+            background: linear-gradient(90deg, var(--warning), #FF9E00);
+            color: black;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1rem;
+        }
+        
+        .tournament-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .tournament-stat {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+        
+        .tournament-stat-value {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            line-height: 1.2;
+        }
+        
+        .tournament-stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 5px;
+        }
+        
+        /* ===== PROFILE PAGE ===== */
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+        
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 15px;
+            border: 3px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .profile-name {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+            color: white;
+        }
+        
+        .profile-rank {
+            display: inline-block;
+            background: linear-gradient(90deg, var(--warning), #FF9E00);
+            color: black;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        
+        /* ===== BOTTOM NAVIGATION ===== */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            gap: 10px;
+            z-index: 1000;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-btn {
+            flex: 1;
+            padding: 15px 10px;
+            border-radius: 15px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+        
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+        }
+        
+        .nav-btn.active {
+            background: rgba(123, 104, 238, 0.2);
+            color: var(--secondary);
+            box-shadow: 0 4px 15px rgba(123, 104, 238, 0.2);
+        }
+        
+        .nav-icon {
+            font-size: 1.4rem;
+        }
+        
+        /* ===== GAME OVER SCREEN ===== */
+        .game-over-content {
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 100%;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .result-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 3.5rem;
+            box-shadow: 0 10px 30px rgba(123, 104, 238, 0.4);
+        }
+        
+        .result-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+        
+        .result-message {
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            font-size: 1.2rem;
+            line-height: 1.5;
+            max-width: 80%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .score-display-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .score-comparison {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 25px;
+        }
+        
+        .player-score {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .score-value-large {
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-top: 10px;
+        }
+        
+        .reward-amount {
+            color: var(--warning);
+            font-weight: 800;
+            text-align: center;
+            font-size: 1.3rem;
+        }
+        
+        /* ===== LOADING ===== */
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--background);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9998;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 15px;
+                padding-bottom: 80px;
+            }
+            
+            .hero-mobile h1 {
+                font-size: 1.8rem;
+            }
+            
+            .action-card {
+                padding: 15px;
+            }
+            
+            .option-card {
+                padding: 15px;
+            }
+            
+            .game-timer {
+                font-size: 3rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .room-code-display {
+                font-size: 2rem;
+                padding: 15px;
+            }
+            
+            .score-value {
+                font-size: 2rem;
+            }
+            
+            .question-text {
+                font-size: 1.1rem;
+            }
+            
+            .game-timer {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Utility Classes */
+        .text-center { text-align: center; }
+        .mt-1 { margin-top: 10px; }
+        .mt-2 { margin-top: 20px; }
+        .mt-3 { margin-top: 30px; }
+        .mb-1 { margin-bottom: 10px; }
+        .mb-2 { margin-bottom: 20px; }
+        .mb-3 { margin-bottom: 30px; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading hidden" id="loadingScreen">
+        <div class="spinner"></div>
+        <div style="color: var(--secondary); font-size: 1.2rem;">Loading...</div>
+    </div>
+    
+    <!-- Auth Screen -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-content">
+            <div class="auth-logo">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h1 class="auth-title">Brain Challenge Pro</h1>
+            <p class="auth-subtitle">Test your knowledge in real-time multiplayer battles</p>
+            
+            <button class="auth-btn google" onclick="signInWithGoogle()">
+                <i class="fab fa-google"></i>
+                Continue with Google
+            </button>
+            
+            <button class="auth-btn anonymous" onclick="signInAnonymously()">
+                <i class="fas fa-user-secret"></i>
+                Play as Guest
+            </button>
+            
+            <p class="auth-footer">Sign in to save your progress and play with friends</p>
+        </div>
+    </div>
+    
+    <!-- Main App -->
+    <div class="app-container" id="appContainer" style="display: none;">
+        <!-- Header -->
+        <header class="mobile-header">
+            <div class="logo-mobile" onclick="goToPage('home')">
+                <i class="fas fa-brain"></i>
+                <span>BrainPro</span>
+            </div>
+            <div class="user-avatar" id="userAvatar" onclick="goToPage('profile')">
+                ?
+            </div>
+        </header>
+        
+        <!-- Content Area -->
+        <div class="content-area scrollable" id="contentArea">
+            <!-- Home Page -->
+            <div class="mobile-page active" id="homePage">
+                <div class="hero-mobile">
+                    <h1 id="welcomeMessage">Welcome, Player!</h1>
+                    <p>Challenge your brain in exciting multiplayer quiz battles</p>
+                </div>
+                
+                <div class="action-cards">
+                    <div class="action-card" onclick="goToPage('singleplayer')">
+                        <div class="action-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Single Player</div>
+                            <div class="action-desc">Practice with AI-generated questions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card" onclick="goToPage('multiplayer')">
+                        <div class="action-icon" style="background: linear-gradient(135deg, #FF6B8B, #FF8E53);">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Multiplayer</div>
+                            <div class="action-desc">Play real-time with friends</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card" onclick="goToPage('tournaments')">
+                        <div class="action-icon" style="background: linear-gradient(135deg, #FFD166, #FF9E00);">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Tournaments</div>
+                            <div class="action-desc">Compete for big prizes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card" onclick="goToPage('friends')">
+                        <div class="action-icon" style="background: linear-gradient(135deg, #00D4A3, #00FF9D);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Friends</div>
+                            <div class="action-desc">Add and challenge friends</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="homeWins">0</div>
+                        <div class="stat-label">Total Wins</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="homeStreak">0</div>
+                        <div class="stat-label">Win Streak</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="homeRank">#--</div>
+                        <div class="stat-label">Global Rank</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="homeLevel">1</div>
+                        <div class="stat-label">Level</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Single Player Page -->
+            <div class="mobile-page" id="singleplayerPage">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goToPage('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Single Player</h2>
+                </div>
+                
+                <div class="hero-mobile">
+                    <h2>🧠 Practice Mode</h2>
+                    <p>Improve your skills with AI-generated questions</p>
+                </div>
+                
+                <div class="action-cards">
+                    <div class="action-card" onclick="startSinglePlayerGame('easy')">
+                        <div class="action-icon" style="background: linear-gradient(135deg, #00FF9D, #00D4A3);">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Easy Mode</div>
+                            <div class="action-desc">10 questions • 30s each • Beginner</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card" onclick="startSinglePlayerGame('medium')">
+                        <div class="action-icon" style="background: linear-gradient(135deg, #FFD166, #FF9E00);">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Medium Mode</div>
+                            <div class="action-desc">15 questions • 25s each • Intermediate</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-card" onclick="startSinglePlayerGame('hard')">
+                        <div class="action-icon" style="background: linear-gradient(135deg, #FF6B8B, #FF8E53);">
+                            <i class="fas fa-fire"></i>
+                        </div>
+                        <div class="action-content">
+                            <div class="action-title">Hard Mode</div>
+                            <div class="action-desc">20 questions • 20s each • Expert</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Multiplayer Lobby -->
+            <div class="mobile-page" id="multiplayerPage">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goToPage('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Multiplayer</h2>
+                </div>
+                
+                <div class="hero-mobile">
+                    <h2>🎮 Play with Friends</h2>
+                    <p>Create or join a room to start playing</p>
+                </div>
+                
+                <button class="btn" onclick="createGameRoom()">
+                    <i class="fas fa-plus-circle"></i>
+                    Create New Room
+                </button>
+                
+                <input type="text" id="roomCodeInput" placeholder="Enter 6-digit room code" maxlength="6" oninput="this.value = this.value.toUpperCase()">
+                
+                <button class="btn btn-secondary" onclick="joinGameRoom()">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Join Room
+                </button>
+                
+                <div class="mt-3">
+                    <h3 style="margin-bottom: 15px;">Active Rooms</h3>
+                    <div id="activeRoomsList"></div>
+                </div>
+            </div>
+            
+            <!-- Room Page -->
+            <div class="mobile-page" id="roomPage">
+                <div class="page-header">
+                    <button class="back-btn" onclick="leaveGameRoom()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 id="roomPageTitle">Room</h2>
+                </div>
+                
+                <div class="room-code-display" id="roomCodeDisplay">ABCDEF</div>
+                <p class="text-center" style="color: rgba(255,255,255,0.7); margin-bottom: 25px;">
+                    Share this code with friends to join
+                </p>
+                
+                <div id="playersListContainer">
+                    <h3 style="margin-bottom: 15px;">Players (<span id="playerCount">1</span>/4)</h3>
+                    <div class="players-list" id="playersList">
+                        <!-- Players will be added here -->
+                    </div>
+                </div>
+                
+                <div id="gameSettings" style="margin-bottom: 25px;">
+                    <h3 style="margin-bottom: 15px;">Game Settings</h3>
+                    <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                            <span>Questions:</span>
+                            <select id="questionsCount" style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 8px; border-radius: 8px;">
+                                <option value="5">5</option>
+                                <option value="10" selected>10</option>
+                                <option value="15">15</option>
+                            </select>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Time per question:</span>
+                            <select id="questionTime" style="background: rgba(255,255,255,0.1); color: white; border: none; padding: 8px; border-radius: 8px;">
+                                <option value="15">15s</option>
+                                <option value="20" selected>20s</option>
+                                <option value="30">30s</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn" id="startGameBtn" onclick="startMultiplayerGame()" style="display: none;">
+                    <i class="fas fa-play"></i>
+                    Start Game
+                </button>
+                
+                <div id="waitingForHost" style="text-align: center; padding: 20px; color: var(--warning);">
+                    <i class="fas fa-hourglass-half" style="font-size: 2rem; margin-bottom: 10px;"></i>
+                    <p>Waiting for host to start the game...</p>
+                </div>
+            </div>
+            
+            <!-- Game Page -->
+            <div class="mobile-page" id="gamePage">
+                <div class="game-header">
+                    <div class="score-item">
+                        <div class="score-value" id="player1Score">0</div>
+                        <div class="score-label" id="player1Name">You</div>
+                    </div>
+                    <div class="score-separator">:</div>
+                    <div class="score-item">
+                        <div class="score-value" id="player2Score">0</div>
+                        <div class="score-label" id="player2Name">Opponent</div>
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin: 15px 0;">
+                    <div style="display: flex; justify-content: center; gap: 5px;" id="questionIndicators">
+                        <!-- Question indicators will go here -->
+                    </div>
+                </div>
+                
+                <div class="game-timer" id="gameTimer">20</div>
+                
+                <div class="question-card">
+                    <div class="question-text" id="questionText">
+                        Loading question...
+                    </div>
+                </div>
+                
+                <div class="options-grid" id="optionsGrid">
+                    <!-- Options will be added here -->
+                </div>
+                
+                <div class="feedback-container hidden" id="feedbackContainer"></div>
+            </div>
+            
+            <!-- Friends Page -->
+            <div class="mobile-page" id="friendsPage">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goToPage('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Friends</h2>
+                </div>
+                
+                <input type="text" id="friendSearchInput" placeholder="Search friends or add by username">
+                
+                <button class="btn btn-secondary" onclick="searchFriend()">
+                    <i class="fas fa-search"></i>
+                    Search Friend
+                </button>
+                
+                <div class="mt-3">
+                    <h3 style="margin-bottom: 15px;">Your Friends</h3>
+                    <div class="friends-list" id="friendsList">
+                        <!-- Friends will be added here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tournaments Page -->
+            <div class="mobile-page" id="tournamentsPage">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goToPage('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Tournaments</h2>
+                </div>
+                
+                <div class="tournament-card">
+                    <div class="tournament-header">
+                        <div class="tournament-title">Weekly Championship</div>
+                        <div class="tournament-prize">5000 🪙</div>
+                    </div>
+                    
+                    <div class="tournament-stats">
+                        <div class="tournament-stat">
+                            <div class="tournament-stat-value" id="tournamentPlayers">0</div>
+                            <div class="tournament-stat-label">Players</div>
+                        </div>
+                        <div class="tournament-stat">
+                            <div class="tournament-stat-value" id="tournamentTime">--:--</div>
+                            <div class="tournament-stat-label">Time Left</div>
+                        </div>
+                        <div class="tournament-stat">
+                            <div class="tournament-stat-value" id="tournamentRank">--</div>
+                            <div class="tournament-stat-label">Your Rank</div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-warning" onclick="joinTournament()">
+                        <i class="fas fa-trophy"></i>
+                        Join Tournament
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Profile Page -->
+            <div class="mobile-page" id="profilePage">
+                <div class="page-header">
+                    <button class="back-btn" onclick="goToPage('home')">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2>Profile</h2>
+                </div>
+                
+                <div class="profile-header">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="profile-name" id="profileDisplayName">Guest</div>
+                    <div style="color: rgba(255,255,255,0.7); margin-bottom: 10px;" id="profileEmail">guest@example.com</div>
+                    <div class="profile-rank" id="profileRank">Bronze</div>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="profileWins">0</div>
+                        <div class="stat-label">Wins</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="profileLosses">0</div>
+                        <div class="stat-label">Losses</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="profileWinRate">0%</div>
+                        <div class="stat-label">Win Rate</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="profileXP">0</div>
+                        <div class="stat-label">Total XP</div>
+                    </div>
+                </div>
+                
+                <button class="btn" onclick="logout()" style="background: var(--accent);">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Logout
+                </button>
+            </div>
+            
+            <!-- Game Over Page -->
+            <div class="mobile-page" id="gameOverPage">
+                <div class="game-over-content">
+                    <div class="result-icon" id="resultIcon">🏆</div>
+                    <div class="result-title" id="resultTitle">Victory!</div>
+                    <div class="result-message" id="resultMessage">You won the match!</div>
+                    
+                    <div class="score-display-card">
+                        <div class="score-comparison">
+                            <div class="player-score">
+                                <div class="score-label">You</div>
+                                <div class="score-value-large" id="finalPlayerScore">0</div>
+                            </div>
+                            <div class="player-score">
+                                <div class="score-label" id="finalOpponentName">Opponent</div>
+                                <div class="score-value-large" id="finalOpponentScore">0</div>
+                            </div>
+                        </div>
+                        <div class="reward-amount" id="rewardAmount">+0 🪙 Earned</div>
+                    </div>
+                    
+                    <button class="btn" onclick="playAgain()">
+                        <i class="fas fa-redo"></i>
+                        Play Again
+                    </button>
+                    <button class="btn btn-secondary mt-2" onclick="goToPage('home')">
+                        <i class="fas fa-home"></i>
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom Navigation -->
+        <nav class="bottom-nav">
+            <button class="nav-btn active" onclick="goToPage('home')">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </button>
+            <button class="nav-btn" onclick="goToPage('multiplayer')">
+                <i class="fas fa-gamepad"></i>
+                <span>Play</span>
+            </button>
+            <button class="nav-btn" onclick="goToPage('tournaments')">
+                <i class="fas fa-trophy"></i>
+                <span>Tournaments</span>
+            </button>
+            <button class="nav-btn" onclick="goToPage('friends')">
+                <i class="fas fa-users"></i>
+                <span>Friends</span>
+            </button>
+            <button class="nav-btn" onclick="goToPage('profile')">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            signInWithPopup, 
+            GoogleAuthProvider, 
+            signInAnonymously,
+            onAuthStateChanged,
+            signOut,
+            updateProfile 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getDatabase, 
+            ref, 
+            set, 
+            get, 
+            push, 
+            onValue, 
+            update,
+            remove,
+            onChildAdded,
+            onChildChanged,
+            onChildRemoved,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPPyl0AJiD6T78bnYOtBgwD_T_o5lMvM",
+            authDomain: "mind-test-game.firebaseapp.com",
+            databaseURL: "https://mind-test-game-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "mind-test-game",
+            storageBucket: "mind-test-game.firebasestorage.app",
+            messagingSenderId: "1043047119163",
+            appId: "1:1043047119163:web:3b6e836b38481467a81f1e",
+            measurementId: "G-Z2XY3W4R66"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Game State
+        let gameState = {
+            user: null,
+            userData: null,
+            currentRoom: null,
+            currentGame: null,
+            isHost: false,
+            questions: [],
+            currentQuestion: 0,
+            playerScore: 0,
+            opponentScore: 0,
+            timer: null,
+            gameType: null // 'single' or 'multi'
+        };
+
+        // ====================
+        // INITIALIZATION
+        // ====================
+        document.addEventListener('DOMContentLoaded', initializeApp);
+
+        async function initializeApp() {
+            showLoading(true);
+            
+            // Check auth state
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    // User is signed in
+                    gameState.user = user;
+                    await loadUserData();
+                    showMainApp();
+                    updateActiveRooms();
+                } else {
+                    // No user signed in
+                    showAuthScreen();
+                }
+                showLoading(false);
+            });
+        }
+
+        // ====================
+        // AUTH FUNCTIONS
+        // ====================
+        async function signInWithGoogle() {
+            try {
+                showLoading(true);
+                const result = await signInWithPopup(auth, googleProvider);
+                console.log("Google sign-in successful");
+            } catch (error) {
+                console.error("Google sign-in error:", error);
+                alert("Sign-in failed: " + error.message);
+                showLoading(false);
+            }
+        }
+
+        async function signInAnonymously() {
+            try {
+                showLoading(true);
+                const result = await signInAnonymously(auth);
+                console.log("Anonymous sign-in successful");
+            } catch (error) {
+                console.error("Anonymous sign-in error:", error);
+                alert("Sign-in failed: " + error.message);
+                showLoading(false);
+            }
+        }
+
+        async function logout() {
+            try {
+                showLoading(true);
+                // Leave room if in one
+                if (gameState.currentRoom) {
+                    await leaveGameRoom();
+                }
+                await signOut(auth);
+                showAuthScreen();
+            } catch (error) {
+                console.error("Logout error:", error);
+                showLoading(false);
+            }
+        }
+
+        // ====================
+        // UI FUNCTIONS
+        // ====================
+        function showLoading(show) {
+            document.getElementById('loadingScreen').classList.toggle('hidden', !show);
+        }
+
+        function showAuthScreen() {
+            document.getElementById('authScreen').style.display = 'flex';
+            document.getElementById('appContainer').style.display = 'none';
+        }
+
+        function showMainApp() {
+            document.getElementById('authScreen').style.display = 'none';
+            document.getElementById('appContainer').style.display = 'flex';
+            updateUserDisplay();
+            loadHomePageStats();
+        }
+
+        function updateUserDisplay() {
+            if (!gameState.user) return;
+            
+            const displayName = gameState.user.displayName || 
+                               gameState.user.email?.split('@')[0] || 
+                               'Guest';
+            const avatarText = displayName.charAt(0).toUpperCase();
+            
+            document.getElementById('userAvatar').textContent = avatarText;
+            document.getElementById('welcomeMessage').textContent = `Welcome, ${displayName}!`;
+            document.getElementById('profileDisplayName').textContent = displayName;
+            document.getElementById('profileEmail').textContent = gameState.user.email || 'Guest Account';
+            document.getElementById('profileAvatar').innerHTML = `<i class="fas fa-user"></i>`;
+        }
+
+        // ====================
+        // PAGE NAVIGATION
+        // ====================
+        function goToPage(page) {
+            // Hide all pages
+            document.querySelectorAll('.mobile-page').forEach(p => {
+                p.classList.remove('active');
+            });
+            
+            // Show selected page
+            const pageElement = document.getElementById(page + 'Page');
+            if (pageElement) {
+                pageElement.classList.add('active');
+                
+                // Update nav buttons
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Activate corresponding nav button
+                const navBtns = document.querySelectorAll('.nav-btn');
+                const pageIndex = ['home', 'multiplayer', 'tournaments', 'friends', 'profile'].indexOf(page);
+                if (pageIndex !== -1) {
+                    navBtns[pageIndex].classList.add('active');
+                }
+            }
+            
+            // Scroll to top
+            document.getElementById('contentArea').scrollTop = 0;
+        }
+
+        // ====================
+        // USER DATA MANAGEMENT
+        // ====================
+        async function loadUserData() {
+            if (!gameState.user) return;
+            
+            const userRef = ref(database, 'users/' + gameState.user.uid);
+            
+            onValue(userRef, (snapshot) => {
+                const data = snapshot.val();
+                gameState.userData = data || {};
+                
+                if (!data) {
+                    // Create new user data
+                    createUserData();
+                } else {
+                    updateUserUI(data);
+                }
+            });
+        }
+
+        async function createUserData() {
+            if (!gameState.user) return;
+            
+            const userData = {
+                name: gameState.user.displayName || 'Guest',
+                email: gameState.user.email || '',
+                wins: 0,
+                losses: 0,
+                draws: 0,
+                xp: 0,
+                level: 1,
+                rank: 'Bronze',
+                gamesPlayed: 0,
+                winStreak: 0,
+                createdAt: Date.now(),
+                lastLogin: Date.now()
+            };
+            
+            await set(ref(database, 'users/' + gameState.user.uid), userData);
+            gameState.userData = userData;
+        }
+
+        function updateUserUI(userData) {
+            // Update home page
+            document.getElementById('homeWins').textContent = userData.wins || 0;
+            document.getElementById('homeStreak').textContent = userData.winStreak || 0;
+            document.getElementById('homeRank').textContent = userData.rank ? '#' + (Math.floor(Math.random() * 1000) + 1) : '#--';
+            document.getElementById('homeLevel').textContent = userData.level || 1;
+            
+            // Update profile page
+            document.getElementById('profileWins').textContent = userData.wins || 0;
+            document.getElementById('profileLosses').textContent = userData.losses || 0;
+            
+            const totalGames = (userData.wins || 0) + (userData.losses || 0) + (userData.draws || 0);
+            const winRate = totalGames > 0 ? Math.round(((userData.wins || 0) / totalGames) * 100) : 0;
+            document.getElementById('profileWinRate').textContent = winRate + '%';
+            document.getElementById('profileXP').textContent = userData.xp || 0;
+            document.getElementById('profileRank').textContent = userData.rank || 'Bronze';
+        }
+
+        async function updateUserStats(result, score = 0) {
+            if (!gameState.user || !gameState.userData) return;
+            
+            const userRef = ref(database, 'users/' + gameState.user.uid);
+            const updates = {};
+            
+            if (result === 'win') {
+                updates.wins = (gameState.userData.wins || 0) + 1;
+                updates.winStreak = (gameState.userData.winStreak || 0) + 1;
+                updates.xp = (gameState.userData.xp || 0) + 100 + Math.floor(score / 10);
+            } else if (result === 'loss') {
+                updates.losses = (gameState.userData.losses || 0) + 1;
+                updates.winStreak = 0;
+                updates.xp = (gameState.userData.xp || 0) + 20;
+            } else {
+                updates.draws = (gameState.userData.draws || 0) + 1;
+                updates.xp = (gameState.userData.xp || 0) + 50;
+            }
+            
+            updates.gamesPlayed = (gameState.userData.gamesPlayed || 0) + 1;
+            updates.lastPlayed = Date.now();
+            
+            // Calculate level based on XP
+            const newXP = updates.xp || gameState.userData.xp || 0;
+            updates.level = Math.floor(newXP / 1000) + 1;
+            
+            // Update rank based on level
+            if (newXP >= 5000) updates.rank = 'Platinum';
+            else if (newXP >= 2000) updates.rank = 'Gold';
+            else if (newXP >= 1000) updates.rank = 'Silver';
+            else updates.rank = 'Bronze';
+            
+            await update(userRef, updates);
+        }
+
+        function loadHomePageStats() {
+            if (!gameState.userData) return;
+            
+            const userData = gameState.userData;
+            document.getElementById('homeWins').textContent = userData.wins || 0;
+            document.getElementById('homeStreak').textContent = userData.winStreak || 0;
+            document.getElementById('homeLevel').textContent = userData.level || 1;
+        }
+
+        // ====================
+        // AI QUESTION GENERATION
+        // ====================
+        async function generateAIQuestions(count, difficulty) {
+            try {
+                // DeepSeek API Configuration
+                const API_KEY = "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";
+                const API_URL = "https://openrouter.ai/api/v1/chat/completions";
+                
+                const prompt = `Generate ${count} multiple choice questions with 4 options each. 
+                Difficulty: ${difficulty}. 
+                Topics: General Knowledge, Science, Mathematics, History, Geography, Technology.
+                Format each question as JSON object: 
+                {
+                    "question": "question text here",
+                    "options": ["option A", "option B", "option C", "option D"],
+                    "correct": 0,
+                    "explanation": "brief explanation here"
+                }
+                Return only a valid JSON array of these objects.`;
+                
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_KEY}`,
+                        'Content-Type': 'application/json',
+                        'HTTP-Referer': 'https://brainchallengepro.com',
+                        'X-Title': 'Brain Challenge Pro'
+                    },
+                    body: JSON.stringify({
+                        model: "deepseek/deepseek-chat",
+                        messages: [
+                            {
+                                role: "user",
+                                content: prompt
+                            }
+                        ],
+                        temperature: 0.7,
+                        max_tokens: 2000
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`API request failed: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.choices && data.choices[0] && data.choices[0].message) {
+                    const content = data.choices[0].message.content;
+                    
+                    // Extract JSON from response
+                    const jsonMatch = content.match(/\[[\s\S]*\]/);
+                    if (jsonMatch) {
+                        const questions = JSON.parse(jsonMatch[0]);
+                        return questions.slice(0, count);
+                    }
+                }
+                
+                // Fallback to local questions
+                return getLocalQuestions(count, difficulty);
+                
+            } catch (error) {
+                console.error("AI Question Generation Error:", error);
+                // Fallback to local questions
+                return getLocalQuestions(count, difficulty);
+            }
+        }
+
+        function getLocalQuestions(count, difficulty) {
+            const questionBank = {
+                easy: [
+                    {
+                        question: "What is the capital of France?",
+                        options: ["London", "Berlin", "Paris", "Madrid"],
+                        correct: 2,
+                        explanation: "Paris is the capital and most populous city of France."
+                    },
+                    {
+                        question: "Which planet is known as the Red Planet?",
+                        options: ["Earth", "Mars", "Jupiter", "Venus"],
+                        correct: 1,
+                        explanation: "Mars appears red due to iron oxide (rust) on its surface."
+                    },
+                    {
+                        question: "What is 5 + 7?",
+                        options: ["10", "11", "12", "13"],
+                        correct: 2,
+                        explanation: "5 + 7 equals 12."
+                    },
+                    {
+                        question: "Which animal is known as the 'King of the Jungle'?",
+                        options: ["Elephant", "Lion", "Tiger", "Bear"],
+                        correct: 1,
+                        explanation: "The lion is traditionally called the 'King of the Jungle'."
+                    },
+                    {
+                        question: "How many colors are in a rainbow?",
+                        options: ["5", "6", "7", "8"],
+                        correct: 2,
+                        explanation: "A rainbow has 7 colors: Red, Orange, Yellow, Green, Blue, Indigo, Violet."
+                    }
+                ],
+                medium: [
+                    {
+                        question: "What is the chemical symbol for Gold?",
+                        options: ["Go", "Gd", "Au", "Ag"],
+                        correct: 2,
+                        explanation: "Au is the chemical symbol for Gold from Latin 'aurum'."
+                    },
+                    {
+                        question: "Who painted the Mona Lisa?",
+                        options: ["Vincent van Gogh", "Leonardo da Vinci", "Pablo Picasso", "Michelangelo"],
+                        correct: 1,
+                        explanation: "Leonardo da Vinci painted the Mona Lisa in the 16th century."
+                    },
+                    {
+                        question: "What is the largest ocean on Earth?",
+                        options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+                        correct: 3,
+                        explanation: "The Pacific Ocean is the largest and deepest ocean."
+                    },
+                    {
+                        question: "Which element has the atomic number 1?",
+                        options: ["Helium", "Oxygen", "Hydrogen", "Carbon"],
+                        correct: 2,
+                        explanation: "Hydrogen has atomic number 1, making it the lightest element."
+                    },
+                    {
+                        question: "What year did World War II end?",
+                        options: ["1943", "1944", "1945", "1946"],
+                        correct: 2,
+                        explanation: "World War II ended in 1945 with the surrender of Germany and Japan."
+                    }
+                ],
+                hard: [
+                    {
+                        question: "What is the speed of light in vacuum?",
+                        options: ["299,792 km/s", "300,000 km/s", "299,792,458 m/s", "300,000,000 m/s"],
+                        correct: 2,
+                        explanation: "The speed of light in vacuum is exactly 299,792,458 meters per second."
+                    },
+                    {
+                        question: "Who developed the theory of relativity?",
+                        options: ["Isaac Newton", "Albert Einstein", "Stephen Hawking", "Niels Bohr"],
+                        correct: 1,
+                        explanation: "Albert Einstein developed both special and general theories of relativity."
+                    },
+                    {
+                        question: "What is the value of π (pi) to 5 decimal places?",
+                        options: ["3.14159", "3.14160", "3.14286", "3.14158"],
+                        correct: 0,
+                        explanation: "π is approximately 3.1415926535, so 3.14159 to 5 decimal places."
+                    },
+                    {
+                        question: "Which country has the most time zones?",
+                        options: ["USA", "Russia", "China", "France"],
+                        correct: 3,
+                        explanation: "France has 12 time zones due to its overseas territories."
+                    },
+                    {
+                        question: "What is the largest prime number less than 100?",
+                        options: ["89", "91", "97", "99"],
+                        correct: 2,
+                        explanation: "97 is the largest prime number less than 100."
+                    }
+                ]
+            };
+            
+            return questionBank[difficulty] || questionBank.easy;
+        }
+
+        // ====================
+        // SINGLE PLAYER GAME
+        // ====================
+        async function startSinglePlayerGame(difficulty) {
+            showLoading(true);
+            
+            const questionCount = difficulty === 'easy' ? 10 : difficulty === 'medium' ? 15 : 20;
+            const timePerQuestion = difficulty === 'easy' ? 30 : difficulty === 'medium' ? 25 : 20;
+            
+            try {
+                // Generate AI questions
+                const questions = await generateAIQuestions(questionCount, difficulty);
+                
+                gameState.questions = questions;
+                gameState.currentQuestion = 0;
+                gameState.playerScore = 0;
+                gameState.gameType = 'single';
+                
+                // Setup game
+                document.getElementById('player1Name').textContent = 'You';
+                document.getElementById('player2Name').textContent = 'AI Opponent';
+                document.getElementById('player2Score').textContent = '0';
+                
+                goToPage('game');
+                loadNextQuestion();
+                
+            } catch (error) {
+                console.error("Error starting single player game:", error);
+                alert("Failed to start game. Please try again.");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // ====================
+        // MULTIPLAYER FUNCTIONS
+        // ====================
+        async function createGameRoom() {
+            if (!gameState.user) {
+                alert("Please sign in first");
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const roomCode = generateRoomCode();
+                gameState.currentRoom = roomCode;
+                gameState.isHost = true;
+                
+                const roomRef = ref(database, 'rooms/' + roomCode);
+                const roomData = {
+                    code: roomCode,
+                    host: gameState.user.uid,
+                    hostName: gameState.user.displayName || 'Guest',
+                    players: {
+                        [gameState.user.uid]: {
+                            uid: gameState.user.uid,
+                            name: gameState.user.displayName || 'Guest',
+                            score: 0,
+                            ready: true,
+                            isHost: true
+                        }
+                    },
+                    status: 'waiting',
+                    settings: {
+                        questionCount: 10,
+                        timePerQuestion: 20,
+                        difficulty: 'medium'
+                    },
+                    createdAt: Date.now(),
+                    maxPlayers: 4
+                };
+                
+                await set(roomRef, roomData);
+                
+                // Setup room listener
+                setupRoomListener(roomCode);
+                
+                // Update UI
+                document.getElementById('roomCodeDisplay').textContent = roomCode;
+                document.getElementById('roomPageTitle').textContent = `Room: ${roomCode}`;
+                document.getElementById('startGameBtn').style.display = 'block';
+                document.getElementById('waitingForHost').style.display = 'none';
+                
+                goToPage('room');
+                updatePlayersList();
+                
+            } catch (error) {
+                console.error("Error creating room:", error);
+                alert("Failed to create room. Please try again.");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function joinGameRoom() {
+            const roomCode = document.getElementById('roomCodeInput').value.trim().toUpperCase();
+            
+            if (!roomCode || roomCode.length !== 6) {
+                alert("Please enter a valid 6-character room code");
+                return;
+            }
+            
+            if (!gameState.user) {
+                alert("Please sign in first");
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                const roomRef = ref(database, 'rooms/' + roomCode);
+                const snapshot = await get(roomRef);
+                
+                if (!snapshot.exists()) {
+                    alert("Room not found");
+                    showLoading(false);
+                    return;
+                }
+                
+                const roomData = snapshot.val();
+                
+                if (roomData.status !== 'waiting') {
+                    alert("Game is already in progress");
+                    showLoading(false);
+                    return;
+                }
+                
+                const playerCount = Object.keys(roomData.players || {}).length;
+                if (playerCount >= 4) {
+                    alert("Room is full");
+                    showLoading(false);
+                    return;
+                }
+                
+                // Join the room
+                gameState.currentRoom = roomCode;
+                gameState.isHost = false;
+                
+                const playerData = {
+                    uid: gameState.user.uid,
+                    name: gameState.user.displayName || 'Guest',
+                    score: 0,
+                    ready: true,
+                    isHost: false,
+                    joinedAt: Date.now()
+                };
+                
+                await update(ref(database, `rooms/${roomCode}/players/${gameState.user.uid}`), playerData);
+                
+                // Setup room listener
+                setupRoomListener(roomCode);
+                
+                // Update UI
+                document.getElementById('roomCodeDisplay').textContent = roomCode;
+                document.getElementById('roomPageTitle').textContent = `Room: ${roomCode}`;
+                document.getElementById('startGameBtn').style.display = 'none';
+                document.getElementById('waitingForHost').style.display = 'block';
+                
+                goToPage('room');
+                
+            } catch (error) {
+                console.error("Error joining room:", error);
+                alert("Failed to join room. Please try again.");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function setupRoomListener(roomCode) {
+            const roomRef = ref(database, 'rooms/' + roomCode);
+            
+            onValue(roomRef, (snapshot) => {
+                const roomData = snapshot.val();
+                
+                if (!roomData) {
+                    // Room was deleted
+                    if (gameState.currentRoom === roomCode) {
+                        alert("Room has been closed by the host");
+                        goToPage('multiplayer');
+                        gameState.currentRoom = null;
+                    }
+                    return;
+                }
+                
+                // Update players list
+                updatePlayersList(roomData.players);
+                
+                // Update game settings if host
+                if (gameState.isHost) {
+                    updateGameSettings(roomData.settings);
+                }
+                
+                // Check if game started
+                if (roomData.status === 'playing' && gameState.currentRoom === roomCode) {
+                    startMultiplayerGameFromRoom(roomData);
+                }
+            });
+        }
+
+        function updatePlayersList(playersData = null) {
+            const playersList = document.getElementById('playersList');
+            playersList.innerHTML = '';
+            
+            let players = playersData;
+            if (!players && gameState.currentRoom) {
+                // Get from room reference
+                return;
+            }
+            
+            if (!players) return;
+            
+            let playerCount = 0;
+            
+            Object.values(players).forEach(player => {
+                playerCount++;
+                const isCurrentUser = player.uid === gameState.user?.uid;
+                const playerElement = document.createElement('div');
+                playerElement.className = `player-item ${isCurrentUser ? 'you' : ''}`;
+                playerElement.innerHTML = `
+                    <div class="player-avatar">${player.name.charAt(0).toUpperCase()}</div>
+                    <div class="player-info">
+                        <div class="player-name">${player.name} ${player.isHost ? '👑' : ''} ${isCurrentUser ? '(You)' : ''}</div>
+                        <div class="player-status ${player.ready ? 'status-ready' : 'status-waiting'}">
+                            ${player.ready ? 'Ready ✓' : 'Waiting...'}
+                        </div>
+                    </div>
+                    <div style="font-size: 1.3rem; font-weight: 700;">${player.score || 0}</div>
+                `;
+                playersList.appendChild(playerElement);
+            });
+            
+            document.getElementById('playerCount').textContent = playerCount;
+        }
+
+        function updateGameSettings(settings) {
+            if (settings) {
+                document.getElementById('questionsCount').value = settings.questionCount || 10;
+                document.getElementById('questionTime').value = settings.timePerQuestion || 20;
+            }
+        }
+
+        async function leaveGameRoom() {
+            if (!gameState.currentRoom) {
+                goToPage('multiplayer');
+                return;
+            }
+            
+            showLoading(true);
+            
+            try {
+                if (gameState.isHost) {
+                    // Host leaving - delete the room
+                    await remove(ref(database, 'rooms/' + gameState.currentRoom));
+                } else {
+                    // Player leaving - remove from players
+                    await update(ref(database, `rooms/${gameState.currentRoom}/players/${gameState.user.uid}`), null);
+                    
+                    // Check if room is now empty
+                    const roomRef = ref(database, 'rooms/' + gameState.currentRoom);
+                    const snapshot = await get(roomRef);
+                    if (snapshot.exists()) {
+                        const roomData = snapshot.val();
+                        const playerCount = Object.keys(roomData.players || {}).length;
+                        if (playerCount === 0) {
+                            await remove(roomRef);
+                        }
+                    }
+                }
+                
+                gameState.currentRoom = null;
+                gameState.isHost = false;
+                goToPage('multiplayer');
+                
+            } catch (error) {
+                console.error("Error leaving room:", error);
+                alert("Error leaving room");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        async function startMultiplayerGame() {
+            if (!gameState.currentRoom || !gameState.isHost) return;
+            
+            showLoading(true);
+            
+            try {
+                const questionCount = parseInt(document.getElementById('questionsCount').value) || 10;
+                const timePerQuestion = parseInt(document.getElementById('questionTime').value) || 20;
+                const difficulty = 'medium'; // You can make this selectable
+                
+                // Generate questions
+                const questions = await generateAIQuestions(questionCount, difficulty);
+                
+                // Update room status
+                const roomUpdates = {
+                    status: 'playing',
+                    questions: questions,
+                    currentQuestion: 0,
+                    settings: {
+                        questionCount: questionCount,
+                        timePerQuestion: timePerQuestion,
+                        difficulty: difficulty
+                    },
+                    startTime: Date.now(),
+                    scores: {}
+                };
+                
+                await update(ref(database, 'rooms/' + gameState.currentRoom), roomUpdates);
+                
+                // Start the game locally
+                gameState.questions = questions;
+                gameState.currentQuestion = 0;
+                gameState.playerScore = 0;
+                gameState.opponentScore = 0;
+                gameState.gameType = 'multi';
+                
+            } catch (error) {
+                console.error("Error starting multiplayer game:", error);
+                alert("Failed to start game. Please try again.");
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        function startMultiplayerGameFromRoom(roomData) {
+            if (!roomData.questions || !Array.isArray(roomData.questions)) {
+                alert("Error loading game questions");
+                return;
+            }
+            
+            gameState.questions = roomData.questions;
+            gameState.currentQuestion = roomData.currentQuestion || 0;
+            gameState.playerScore = 0;
+            gameState.opponentScore = 0;
+            gameState.gameType = 'multi';
+            
+            // Get opponent info
+            const players = Object.values(roomData.players || {});
+            const currentPlayer = players.find(p => p.uid === gameState.user?.uid);
+            const opponent = players.find(p => p.uid !== gameState.user?.uid);
+            
+            if (opponent) {
+                document.getElementById('player2Name').textContent = opponent.name;
+            }
+            
+            // Update scores
+            document.getElementById('player1Score').textContent = '0';
+            document.getElementById('player2Score').textContent = '0';
+            
+            goToPage('game');
+            loadNextQuestion();
+        }
+
+        function generateRoomCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = '';
+            for (let i = 0; i < 6; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        function updateActiveRooms() {
+            const roomsRef = ref(database, 'rooms');
+            onValue(roomsRef, (snapshot) => {
+                const rooms = snapshot.val() || {};
+                const activeRoomsList = document.getElementById('activeRoomsList');
+                activeRoomsList.innerHTML = '';
+                
+                Object.entries(rooms).forEach(([code, room]) => {
+                    if (room.status === 'waiting') {
+                        const players = Object.values(room.players || {});
+                        const playerCount = players.length;
+                        
+                        if (playerCount < 4) {
+                            const roomElement = document.createElement('div');
+                            roomElement.className = 'player-item';
+                            roomElement.style.cursor = 'pointer';
+                            roomElement.onclick = () => {
+                                document.getElementById('roomCodeInput').value = code;
+                                joinGameRoom();
+                            };
+                            roomElement.innerHTML = `
+                                <div style="flex: 1;">
+                                    <div style="font-weight: 700; font-size: 1.1rem;">Room: ${code}</div>
+                                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 5px;">
+                                        ${playerCount}/4 players • Host: ${room.hostName || 'Unknown'}
+                                    </div>
+                                </div>
+                                <div style="color: var(--success); font-weight: 700;">Join</div>
+                            `;
+                            activeRoomsList.appendChild(roomElement);
+                        }
+                    }
+                });
+            });
+        }
+
+        // ====================
+        // GAME LOGIC
+        // ====================
+        function loadNextQuestion() {
+            if (gameState.currentQuestion >= gameState.questions.length) {
+                endGame();
+                return;
+            }
+            
+            const question = gameState.questions[gameState.currentQuestion];
+            
+            // Update question text
+            document.getElementById('questionText').textContent = question.question;
+            
+            // Update question indicators
+            updateQuestionIndicators();
+            
+            // Load options
+            const optionsGrid = document.getElementById('optionsGrid');
+            optionsGrid.innerHTML = '';
+            
+            const letters = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option-card';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                
+                optionElement.onclick = () => selectAnswer(index, question);
+                optionsGrid.appendChild(optionElement);
+            });
+            
+            // Reset feedback
+            document.getElementById('feedbackContainer').classList.add('hidden');
+            
+            // Start timer
+            startQuestionTimer();
+        }
+
+        function updateQuestionIndicators() {
+            const container = document.getElementById('questionIndicators');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            const total = gameState.questions.length;
+            
+            for (let i = 0; i < total; i++) {
+                const indicator = document.createElement('div');
+                indicator.style.width = '20px';
+                indicator.style.height = '4px';
+                indicator.style.background = i < gameState.currentQuestion ? 'var(--success)' : 
+                                           i === gameState.currentQuestion ? 'var(--secondary)' : 
+                                           'rgba(255,255,255,0.2)';
+                indicator.style.borderRadius = '2px';
+                indicator.style.transition = 'background 0.3s';
+                container.appendChild(indicator);
+            }
+        }
+
+        function startQuestionTimer() {
+            const timePerQuestion = gameState.gameType === 'single' ? 
+                (gameState.questions.length <= 10 ? 30 : gameState.questions.length <= 15 ? 25 : 20) : 
+                20; // For multiplayer, use room setting
+            
+            let timeLeft = timePerQuestion;
+            document.getElementById('gameTimer').textContent = timeLeft;
+            
+            // Clear existing timer
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            
+            gameState.timer = setInterval(() => {
+                timeLeft--;
+                document.getElementById('gameTimer').textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    handleTimeout();
+                }
+            }, 1000);
+        }
+
+        async function selectAnswer(selectedIndex, question) {
+            // Stop timer
+            clearInterval(gameState.timer);
+            
+            // Disable all options
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.style.pointerEvents = 'none';
+            });
+            
+            const isCorrect = selectedIndex === question.correct;
+            
+            // Mark correct and wrong answers
+            document.querySelectorAll('.option-card').forEach((card, index) => {
+                if (index === question.correct) {
+                    card.classList.add('correct');
+                } else if (index === selectedIndex && !isCorrect) {
+                    card.classList.add('wrong');
+                }
+            });
+            
+            // Update score
+            if (isCorrect) {
+                gameState.playerScore += 100;
+                document.getElementById('player1Score').textContent = gameState.playerScore;
+                
+                showFeedback('Correct! +100 points', 'correct');
+            } else {
+                showFeedback(`Wrong! Correct answer: ${question.options[question.correct]}`, 'incorrect');
+            }
+            
+            // For multiplayer, update score in Firebase
+            if (gameState.gameType === 'multi' && gameState.currentRoom) {
+                await update(ref(database, `rooms/${gameState.currentRoom}/players/${gameState.user.uid}/score`), gameState.playerScore);
+            }
+            
+            // For single player, simulate opponent score
+            if (gameState.gameType === 'single') {
+                const opponentCorrect = Math.random() > 0.3; // 70% chance opponent gets it right
+                if (opponentCorrect) {
+                    gameState.opponentScore += 100;
+                    document.getElementById('player2Score').textContent = gameState.opponentScore;
+                }
+            }
+            
+            // Wait and move to next question
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                loadNextQuestion();
+            }, 2000);
+        }
+
+        function handleTimeout() {
+            showFeedback("Time's up!", 'incorrect');
+            
+            // For single player, simulate opponent answer
+            if (gameState.gameType === 'single') {
+                const opponentCorrect = Math.random() > 0.5;
+                if (opponentCorrect) {
+                    gameState.opponentScore += 100;
+                    document.getElementById('player2Score').textContent = gameState.opponentScore;
+                }
+            }
+            
+            // Move to next question after delay
+            setTimeout(() => {
+                gameState.currentQuestion++;
+                loadNextQuestion();
+            }, 1500);
+        }
+
+        function showFeedback(message, type) {
+            const feedbackContainer = document.getElementById('feedbackContainer');
+            feedbackContainer.innerHTML = `
+                <i class="fas fa-${type === 'correct' ? 'check-circle' : 'times-circle'}"></i>
+                <span>${message}</span>
+            `;
+            feedbackContainer.className = `feedback-container feedback ${type}`;
+            feedbackContainer.classList.remove('hidden');
+        }
+
+        function endGame() {
+            clearInterval(gameState.timer);
+            
+            let result = '';
+            let resultIcon = '';
+            let reward = 0;
+            
+            if (gameState.gameType === 'single') {
+                // Single player game result
+                if (gameState.playerScore > gameState.opponentScore) {
+                    result = 'You Win!';
+                    resultIcon = '🏆';
+                    reward = 100 + Math.floor(gameState.playerScore / 10);
+                    updateUserStats('win', gameState.playerScore);
+                } else if (gameState.playerScore < gameState.opponentScore) {
+                    result = 'AI Wins';
+                    resultIcon = '🤖';
+                    reward = 20;
+                    updateUserStats('loss');
+                } else {
+                    result = 'Draw!';
+                    resultIcon = '🤝';
+                    reward = 50;
+                    updateUserStats('draw');
+                }
+                
+                document.getElementById('finalOpponentName').textContent = 'AI Opponent';
+                document.getElementById('finalOpponentScore').textContent = gameState.opponentScore;
+                
+            } else {
+                // Multiplayer game result
+                // For now, just show score
+                result = 'Game Over';
+                resultIcon = '🎮';
+                reward = Math.floor(gameState.playerScore / 10);
+                
+                // Get opponent score from room data
+                // This would need to be implemented with real-time updates
+                document.getElementById('finalOpponentName').textContent = 'Opponent';
+                document.getElementById('finalOpponentScore').textContent = gameState.opponentScore;
+            }
+            
+            // Update game over screen
+            document.getElementById('resultIcon').textContent = resultIcon;
+            document.getElementById('resultTitle').textContent = result;
+            document.getElementById('resultMessage').textContent = `Final Score: ${gameState.playerScore}`;
+            document.getElementById('finalPlayerScore').textContent = gameState.playerScore;
+            document.getElementById('rewardAmount').textContent = `+${reward} 🪙 Earned`;
+            
+            // Clean up multiplayer room
+            if (gameState.gameType === 'multi' && gameState.currentRoom) {
+                // Update game as completed
+                update(ref(database, `rooms/${gameState.currentRoom}`), {
+                    status: 'completed',
+                    endTime: Date.now()
+                }).then(() => {
+                    // Delete room after delay
+                    setTimeout(() => {
+                        remove(ref(database, 'rooms/' + gameState.currentRoom));
+                        gameState.currentRoom = null;
+                    }, 5000);
+                });
+            }
+            
+            // Show game over screen
+            goToPage('gameOver');
+        }
+
+        function playAgain() {
+            if (gameState.gameType === 'single') {
+                goToPage('singleplayer');
+            } else {
+                goToPage('multiplayer');
+            }
+        }
+
+        // ====================
+        // FRIENDS SYSTEM
+        // ====================
+        function searchFriend() {
+            const searchInput = document.getElementById('friendSearchInput').value.trim();
+            if (!searchInput) {
+                alert("Please enter a username to search");
+                return;
+            }
+            
+            alert(`Searching for friend: ${searchInput}\n\nNote: Friend system requires additional Firebase setup with user search functionality.`);
+        }
+
+        // ====================
+        // TOURNAMENTS
+        // ====================
+        function joinTournament() {
+            alert("Joining tournament...\n\nTournament feature requires additional setup with scheduled games and prize distribution.");
+        }
+
+        // ====================
+        // MAKE FUNCTIONS GLOBAL
+        // ====================
+        window.signInWithGoogle = signInWithGoogle;
+        window.signInAnonymously = signInAnonymously;
+        window.logout = logout;
+        window.goToPage = goToPage;
+        window.startSinglePlayerGame = startSinglePlayerGame;
+        window.createGameRoom = createGameRoom;
+        window.joinGameRoom = joinGameRoom;
+        window.leaveGameRoom = leaveGameRoom;
+        window.startMultiplayerGame = startMultiplayerGame;
+        window.searchFriend = searchFriend;
+        window.joinTournament = joinTournament;
+        window.playAgain = playAgain;
+
+    </script>
+</body>
+</html>
